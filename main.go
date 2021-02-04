@@ -1,14 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
-	"github.com/Raffy27/Hydra/util"
+	"github.com/Raffy27/Hydra/api"
 )
 
 func main() {
-	elevated := util.RunningAsAdmin()
-	admin := util.IsUserAdmin()
-	fmt.Println("Elevated?", elevated)
-	fmt.Println("Admin?", admin)
+	log.Println("Logged in as", api.Bot.Self.UserName)
+	for u := range api.Updates {
+		if u.Message == nil {
+			continue
+		}
+		log.Printf("[%s] %s", u.Message.From.UserName, u.Message.Text)
+		if u.Message.IsCommand() {
+			switch u.Message.Command() {
+			case "ping":
+				api.SendMessage(u.Message, "Pong!")
+			}
+		}
+	}
 }
