@@ -21,6 +21,10 @@ func main() {
 			switch u.Message.Command() {
 			case "ping":
 				api.SendMessage(u.Message, "Pong!")
+			case "reset":
+				close(api.StopHeartbeat)
+				util.Genesis = api.SendMessage(u.Message, "Genesis").MessageID
+				go api.Heartbeat()
 			case "file":
 				wha, err := api.Bot.UploadFile("sendPhoto", map[string]string{
 					"chat_id": fmt.Sprint(u.Message.Chat.ID),
