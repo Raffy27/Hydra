@@ -10,6 +10,7 @@ var (
 	Bot *tgbotapi.BotAPI
 	//Updates is the channel interface for Telegram commands.
 	Updates tgbotapi.UpdatesChannel
+	Status  tgbotapi.EditMessageTextConfig
 )
 
 func init() {
@@ -22,10 +23,13 @@ func init() {
 	upd.Timeout = 30
 	Updates, err = Bot.GetUpdatesChan(upd)
 	util.Handle(err)
+
+	Status = tgbotapi.NewEditMessageText(util.ChatID, util.Genesis, "")
 }
 
 //SendMessage is a convenience function for replying to simple Telegram messages.
-func SendMessage(org *tgbotapi.Message, msg string) {
-	m := tgbotapi.NewMessage(org.Chat.ID, msg)
-	Bot.Send(m)
+func SendMessage(org *tgbotapi.Message, txt string) tgbotapi.Message {
+	m := tgbotapi.NewMessage(org.Chat.ID, txt)
+	msg, _ := Bot.Send(m)
+	return msg
 }
