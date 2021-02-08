@@ -13,6 +13,7 @@ import (
 var (
 	//StopHeartbeat signals the associated goroutine to stop when it is closed.
 	StopHeartbeat chan struct{}
+	Genesis       int
 )
 
 type beatConfig struct {
@@ -31,13 +32,22 @@ func (b *beatConfig) Format() string {
 	)
 }
 
+func NewGenesis() {
+	if StopHeartbeat != nil {
+		close(StopHeartbeat)
+	}
+	m := tgbotapi.NewMessage(util.ChatID, util.GenesisText)
+	msg, _ := Bot.Send(m)
+	Genesis = msg.MessageID
+}
+
 //Heartbeat is the function that provides status updates.
 func Heartbeat() {
 	log.Println("Heartbeat started")
 	StopHeartbeat = make(chan struct{})
 	ticker := time.NewTicker(util.Interval * time.Second)
 	//Create edit struct
-	status := tgbotapi.NewEditMessageText(util.ChatID, util.Genesis, "")
+	status := tgbotapi.NewEditMessageText(util.ChatID, Genesis, "")
 	status.ParseMode = "Markdown"
 	beat := beatConfig{
 		header: "💙",
