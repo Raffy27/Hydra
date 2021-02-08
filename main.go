@@ -9,9 +9,9 @@ import (
 
 func main() {
 	log.Println("Logged in as", api.Bot.Self.UserName)
-	api.NewGenesis()
+	//api.NewGenesis()
 	log.Println("Genesis is", api.Genesis)
-	go api.Heartbeat()
+	//go api.Heartbeat()
 	for u := range api.Updates {
 		if u.Message == nil {
 			continue
