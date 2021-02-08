@@ -20,5 +20,19 @@ func GPUInfo() string {
 			return gpu.GraphicsCards[0].DeviceInfo.Product.Name
 		}
 	}
+
+	return "Unknown"
+}
+
+func MemoryInfo() string {
+	if mem, err := ghw.Memory(); err == nil {
+		var str string
+		if len(mem.Modules) > 0 {
+			str = mem.Modules[0].Vendor + " "
+		}
+		str += mem.String()[7:]
+		return str
+	}
+
 	return "Unknown"
 }
