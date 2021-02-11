@@ -15,6 +15,8 @@ func Perform(message *tgbotapi.Message) {
 		Reset()
 	case "info":
 		Info()
+	case "software":
+		Software()
 	case "file":
 		wha, err := api.Bot.UploadFile("sendPhoto", map[string]string{
 			"chat_id": fmt.Sprint(message.Chat.ID),

@@ -20,7 +20,7 @@ func init() {
 	var err error
 	Bot, err = tgbotapi.NewBotAPI("1663927036:AAGiFpqOWXzFsBFVK6t7rWa-DpnlfZzIPYE")
 	util.Handle(err)
-	Bot.Debug = true
+	//Bot.Debug = true
 
 	upd := tgbotapi.NewUpdate(0)
 	upd.Timeout = 30
@@ -37,6 +37,9 @@ func SendMessage(org *tgbotapi.Message, txt string) tgbotapi.Message {
 
 func SendFragmented(msg string, sep string, prefix string, suffix string) tgbotapi.Message {
 	var m tgbotapi.Message
+	cfg := tgbotapi.NewMessage(util.ChatID, msg)
+	cfg.ParseMode = "Markdown"
+
 	if len(msg) > msgSize {
 		l := strings.Split(msg, sep)
 		f := prefix
@@ -46,15 +49,13 @@ func SendFragmented(msg string, sep string, prefix string, suffix string) tgbota
 				continue
 			}
 			f += suffix
-			cfg := tgbotapi.NewMessage(util.ChatID, f)
-			cfg.ParseMode = "Markdown"
-			m, _ = Bot.Send(cfg)
+			cfg.Text = f
+			Bot.Send(cfg)
 			f = prefix
 		}
-		return m
+		cfg.Text = f + suffix
 	}
-	cfg := tgbotapi.NewMessage(util.ChatID, msg)
-	cfg.ParseMode = "Markdown"
+
 	m, _ = Bot.Send(cfg)
 	return m
 }

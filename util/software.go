@@ -3,9 +3,12 @@ package util
 import (
 	"fmt"
 	"os/exec"
+	"sort"
 	"strconv"
 	"strings"
 	"syscall"
+
+	"golang.org/x/sys/windows/registry"
 )
 
 const (
@@ -13,6 +16,7 @@ const (
 	enMask
 
 	wmiCommand = "$i=(Get-CimInstance -n root/SecurityCenter2 -cl %s);foreach($v in $i){$v.displayName;$v.productState}"
+	softKeys   = "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
 )
 
 type anti struct {
@@ -89,4 +93,28 @@ func AntiInfo() string {
 		info += "\n"
 	}
 	return strings.TrimSpace(info)
+}
+
+func SoftwareInfo() string {
+	s := []string{}
+
+	uninst, err := registry.OpenKey(registry.LOCAL_MACHINE, softKeys, registry.ENUMERATE_SUB_KEYS)
+	Handle(err)
+	defer uninst.Close()
+	keys, err := uninst.ReadSubKeyNames(0)
+	for _, v := range keys {
+		key, err := registry.OpenKey(uninst, v, registry.READ)
+		Handle(err)
+		name, _, err := key.GetStringValue("DisplayName")
+		if err != nil {
+			continue
+		}
+		key.Close()
+
+		s = append(s, name)
+	}
+
+	sort.Strings(s)
+	s = RemoveDuplicates(s)
+	return strings.Join(s, "\n")
 }

