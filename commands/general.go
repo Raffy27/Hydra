@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"time"
 
@@ -42,6 +43,16 @@ func Shell(command string) {
 	api.Bot.Send(cfg)
 }
 
+//UploadFile handles /file commands by checking for and uploading a file.
 func UploadFile(file string) {
-
+	fi, err := os.Stat(file)
+	if os.IsNotExist(err) {
+		api.Bot.Send(tgbotapi.NewMessage(util.ChatID, "The specified file does not exist."))
+		return
+	}
+	if fi.IsDir() {
+		api.Bot.Send(tgbotapi.NewMessage(util.ChatID, "This command expects a file, not a directory."))
+		return
+	}
+	api.Bot.Send(tgbotapi.NewDocumentUpload(util.ChatID, file))
 }
