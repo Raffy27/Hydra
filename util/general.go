@@ -1,5 +1,10 @@
 package util
 
+import (
+	"io"
+	"os"
+)
+
 //RemoveDuplicates returns a new slice with duplicate elements removed.
 func RemoveDuplicates(slice []string) []string {
 	keys := make(map[string]bool)
@@ -13,4 +18,24 @@ func RemoveDuplicates(slice []string) []string {
 	}
 
 	return list
+}
+
+//CopyFile attempts to copy a file from src to dst.
+//Attributes are not preserved.
+//Environment variables in paths are not supported.
+func CopyFile(src, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	return err
 }

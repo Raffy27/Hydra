@@ -9,3 +9,10 @@ func Handle(err error) {
 	}
 	log.Panicln(err)
 }
+
+func Panicln(err error, str string) {
+	if err == nil {
+		return
+	}
+	log.Panicln(str+",", err)
+}
