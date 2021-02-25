@@ -10,6 +10,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+//IsInstalled checks whether or not a valid Base is already present on the system.
 func IsInstalled() bool {
 	base := os.ExpandEnv(util.Base)
 	fi, err := os.Stat(base)
