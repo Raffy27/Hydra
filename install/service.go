@@ -1,6 +1,7 @@
 package install
 
 import (
+	"log"
 	"os"
 	"path"
 	"runtime"
@@ -19,10 +20,11 @@ func (m *svcHandler) Execute(args []string, r <-chan svc.ChangeRequest, changes 
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
 	changes <- svc.Status{State: svc.StartPending}
 	os.Setenv("nocheck", "poly")
+	log.Println("Goroutine started")
 	go m.main()
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
-loop:
+	//loop:
 	for {
 		c := <-r
 		switch c.Cmd {
@@ -31,7 +33,7 @@ loop:
 			time.Sleep(100 * time.Millisecond)
 			changes <- c.CurrentStatus
 		case svc.Stop, svc.Shutdown:
-			break loop
+			//break loop
 		case svc.Pause:
 			changes <- svc.Status{State: svc.Paused, Accepts: cmdsAccepted}
 		case svc.Continue:

