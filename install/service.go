@@ -24,7 +24,7 @@ func (m *svcHandler) Execute(args []string, r <-chan svc.ChangeRequest, changes 
 	go m.main()
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
-	//loop:
+loop:
 	for {
 		c := <-r
 		switch c.Cmd {
@@ -33,7 +33,7 @@ func (m *svcHandler) Execute(args []string, r <-chan svc.ChangeRequest, changes 
 			time.Sleep(100 * time.Millisecond)
 			changes <- c.CurrentStatus
 		case svc.Stop, svc.Shutdown:
-			//break loop
+			break loop
 		case svc.Pause:
 			changes <- svc.Status{State: svc.Paused, Accepts: cmdsAccepted}
 		case svc.Continue:

