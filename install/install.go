@@ -43,4 +43,6 @@ func Install() {
 //Uninstall attempts to undo all of the changes done to the system by Install.
 func Uninstall() {
 	UninstallService()
+	UninstallTask()
+	UninstallRegistry(nil)
 }
