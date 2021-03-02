@@ -25,6 +25,7 @@ func TryFolderInstall() error {
 	return err
 }
 
+//UninstallFolder attempts to remove the startup shortcut.
 func UninstallFolder() error {
 	cmd := exec.Command("powershell", removeCmd)
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}

