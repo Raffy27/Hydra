@@ -46,7 +46,7 @@ loop:
 
 //TryServiceInstall attempts to install a Windows Service pointing to Hydra.
 func TryServiceInstall() error {
-	bin := path.Join(os.ExpandEnv(util.Base), util.Binary)
+	bin := path.Join(os.ExpandEnv(Info.Base), util.Binary)
 
 	m, err := mgr.Connect()
 	if err != nil {

