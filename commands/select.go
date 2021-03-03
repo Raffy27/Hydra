@@ -37,6 +37,9 @@ func Perform(message *tgbotapi.Message) {
 		Info()
 	case "software":
 		Software()
+	case "root":
+	case "dl":
+		Download(message.CommandArguments())
 	case "sh":
 		Shell(message.CommandArguments())
 	case "file":
