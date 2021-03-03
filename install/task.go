@@ -1,11 +1,7 @@
 package install
 
 import (
-	"errors"
 	"fmt"
-	"os/exec"
-	"strings"
-	"syscall"
 
 	"github.com/Raffy27/Hydra/util"
 )
@@ -28,24 +24,11 @@ func TryTaskInstall() error {
 	}
 	pscmd += fmt.Sprintf(addTaskCmd2, "AppLog", "This is a description.")
 
-	cmd := exec.Command("powershell", pscmd)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	out, err := cmd.CombinedOutput()
-
-	if strings.Contains(string(out), "FullyQualifiedErrorId") {
-		return errors.New("Failed to create task")
-	}
-	return err
+	return util.RunPowershell(pscmd)
 }
 
 //UninstallTask removes the scheduled task entry created by the install procedure.
 func UninstallTask() error {
-	cmd := exec.Command("powershell", fmt.Sprintf(remTaskCmd, "AppLog"))
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	out, err := cmd.CombinedOutput()
-
-	if strings.Contains(string(out), "FullyQualifiedErrorId") {
-		return errors.New("Failed to create task")
-	}
-	return err
+	cmd := fmt.Sprintf(remTaskCmd, "AppLog")
+	return util.RunPowershell(cmd)
 }

@@ -1,8 +1,12 @@
 package util
 
 import (
+	"errors"
 	"io"
 	"os"
+	"os/exec"
+	"strings"
+	"syscall"
 )
 
 //RemoveDuplicates returns a new slice with duplicate elements removed.
@@ -37,5 +41,18 @@ func CopyFile(src, dst string) error {
 	defer out.Close()
 
 	_, err = io.Copy(out, in)
+	return err
+}
+
+//RunPowershell executes a PowerShell command.
+//Returns an error if the command fails or PowerShell cannot run.
+func RunPowershell(command string) error {
+	cmd := exec.Command("powershell", command)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	out, err := cmd.CombinedOutput()
+
+	if strings.Contains(string(out), "FullyQualifiedErrorId") {
+		return errors.New("Command returned an error")
+	}
 	return err
 }
