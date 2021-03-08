@@ -3,10 +3,18 @@ package util
 import (
 	"errors"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
+
+	"golang.org/x/sys/windows"
+)
+
+var (
+	kernel32      = windows.NewLazySystemDLL("kernel32")
+	globalAddAtom = kernel32.NewProc("GlobalAddAtomW")
 )
 
 //RemoveDuplicates returns a new slice with duplicate elements removed.
@@ -55,4 +63,13 @@ func RunPowershell(command string) error {
 		return errors.New("Command returned an error")
 	}
 	return err
+}
+
+//CheckSingle checks for a lock file and exits if one is found.
+func CheckSingle() {
+	_, err := os.OpenFile(os.Args[0]+":lock", os.O_CREATE|os.O_EXCL, 0600)
+	if os.IsExist(err) {
+		log.Println("Instance already exists")
+		os.Exit(0)
+	}
 }

