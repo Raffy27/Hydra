@@ -89,7 +89,7 @@ func Install() {
 	log.Println("Base set: " + base)
 
 	err = CopyExecutable()
-	util.Panicln(err, "Binary relocation failed")
+	log.Println("Binary relocation failed,", err)
 
 	for i := 1; i < 4; i++ {
 		if err := 0; /*persist(i);*/ err == 0 {

