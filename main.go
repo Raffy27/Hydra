@@ -12,6 +12,13 @@ import (
 	"golang.org/x/sys/windows/svc"
 )
 
+func init() {
+	//Patch os.Args[0] to work with absolute paths later
+	if fp, err := os.Executable(); err == nil {
+		os.Args[0] = fp
+	}
+}
+
 func checkSwitch(sw string) bool {
 	for _, arg := range os.Args[1:] {
 		if arg == sw {

