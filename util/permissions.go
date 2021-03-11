@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
+	"syscall"
 
 	"golang.org/x/sys/windows"
 )
@@ -70,4 +72,23 @@ func IsWritable(path string) bool {
 	}
 
 	return true
+}
+
+//RunAsAdmin attempts to execute a command with admin rights.
+func RunAsAdmin(command, arguments string) error {
+	verb, _ := syscall.UTF16PtrFromString("runas")
+	exec, _ := syscall.UTF16PtrFromString(command)
+	t, _ := os.Getwd()
+	cwd, _ := syscall.UTF16PtrFromString(t)
+	args, _ := syscall.UTF16PtrFromString(arguments)
+
+	return windows.ShellExecute(0, verb, exec, args, cwd, 1)
+}
+
+//ElevateNormal attempts to relaunch Hydra with admin rights.
+//It displays a common UAC prompt to the user, with the name of the executable.
+func ElevateNormal() error {
+	exe, _ := os.Executable()
+	args := strings.Join(os.Args[1:], " ")
+	return RunAsAdmin(exe, args)
 }

