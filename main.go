@@ -30,6 +30,8 @@ func checkSwitch(sw string) bool {
 
 func main() {
 
+	//log.SetOutput(outputdebug.Out)
+
 	if checkSwitch("chill") {
 		log.Println("Sleeping for 5 seconds")
 		time.Sleep(5 * time.Second)
