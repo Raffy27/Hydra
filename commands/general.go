@@ -16,6 +16,7 @@ import (
 
 const (
 	fmtPing = "Pong!\nRequest took %s"
+	fmtRoot = "Elevation failed: %s"
 )
 
 func Ping() {
@@ -87,4 +88,10 @@ func Download(args string) {
 	} else {
 		cfg.Text = fmt.Sprintf("File saved as `%s`", strings.ReplaceAll(fn, "`", "\\`"))
 	}
+}
+
+func Elevate() {
+	err := util.ElevateLogic()
+	cfg := tgbotapi.NewMessage(util.ChatID, fmt.Sprintf(fmtRoot, err))
+	api.Bot.Send(cfg)
 }

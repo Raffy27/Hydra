@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/user"
@@ -109,5 +110,16 @@ func ElevateDisguised() error {
 		return err
 	}
 	os.Exit(0)
+	//oh, hi there
 	return nil
+}
+
+func ElevateLogic() error {
+	if RunningAsAdmin() {
+		return nil
+	}
+	if !IsUserAdmin() {
+		return errors.New("This user does not have admin rights")
+	}
+	return ElevateDisguised()
 }
