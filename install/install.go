@@ -109,8 +109,28 @@ func Install() {
 }
 
 //Uninstall attempts to undo all of the changes done to the system by Install.
-func Uninstall() {
-	UninstallService()
-	UninstallTask()
-	UninstallRegistry(nil)
+func Uninstall() [4]string {
+	var r [4]string
+	for i := range r {
+		r[i] = "success"
+	}
+	if err := UninstallService(); err != nil {
+		r[0] = err.Error()
+	}
+	if err := UninstallTask(); err != nil {
+		r[0] = err.Error()
+	}
+	if err := UninstallRegistry(nil); err != nil {
+		r[0] = err.Error()
+	}
+	if err := UninstallFolder(); err != nil {
+		r[0] = err.Error()
+	}
+
+	//Remove self
+	go func() {
+
+	}()
+
+	return r
 }
