@@ -53,7 +53,7 @@ func RunPowershell(command string) error {
 	out, err := cmd.CombinedOutput()
 
 	if strings.Contains(string(out), "FullyQualifiedErrorId") {
-		return errors.New("Command returned an error")
+		return errors.New("Command returned an error: " + string(out))
 	}
 	return err
 }

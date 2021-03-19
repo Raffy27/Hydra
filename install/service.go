@@ -82,9 +82,7 @@ func UninstallService() error {
 	}
 	defer s.Close()
 
-	//This returns an error even if it works as expected
-	s.Delete()
-	return nil
+	return s.Delete()
 }
 
 //HandleService starts accepting Service Control Commands from the operating system.

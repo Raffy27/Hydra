@@ -129,13 +129,13 @@ func Uninstall() [4]string {
 		r[0] = err.Error()
 	}
 	if err := UninstallTask(); err != nil {
-		r[0] = err.Error()
+		r[1] = "failed"
 	}
 	if err := UninstallRegistry(nil); err != nil {
-		r[0] = err.Error()
+		r[2] = err.Error()
 	}
 	if err := UninstallFolder(); err != nil {
-		r[0] = err.Error()
+		r[3] = "failed"
 	}
 
 	//Remove self
