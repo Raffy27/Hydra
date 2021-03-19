@@ -37,7 +37,7 @@ func SendMessage(org *tgbotapi.Message, txt string) tgbotapi.Message {
 
 func SendFragmented(msg string, sep string, prefix string, suffix string) tgbotapi.Message {
 	var m tgbotapi.Message
-	cfg := tgbotapi.NewMessage(util.ChatID, msg)
+	cfg := tgbotapi.NewMessage(util.ChatID, prefix+msg+suffix)
 	cfg.ParseMode = "Markdown"
 
 	if len(msg) > msgSize {

@@ -42,7 +42,7 @@ func Shell(command string) {
 	if err != nil {
 		out = err.Error() + "\n" + out
 	}
-	api.SendFragmented(out, "\n", "```\n", "\n```")
+	api.SendFragmented(strings.TrimSpace(out), "\n", "```\n", "```")
 }
 
 //UploadFile handles /file commands by checking for and uploading a file.

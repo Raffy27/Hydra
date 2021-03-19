@@ -56,6 +56,8 @@ func main() {
 		}
 	}
 
+	os.Chdir(install.Info.Base)
+
 	log.Println("Logged in as", api.Bot.Self.UserName)
 	//api.NewGenesis()
 	log.Println("Genesis is", api.Genesis)

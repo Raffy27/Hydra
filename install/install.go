@@ -22,7 +22,7 @@ type installInfo struct {
 var Info installInfo
 
 const (
-	cmdUninstall = "kill %d -F;rm '%s' -R -Fo"
+	cmdUninstall = "cd C:\\;kill %d -F;rm '%s' -R -Fo"
 )
 
 //IsInstalled checks whether or not a valid Base is already present on the system.
