@@ -48,8 +48,15 @@ func CopyFile(src, dst string) error {
 //RunPowershell executes a PowerShell command.
 //Returns an error if the command fails or PowerShell cannot run.
 func RunPowershell(command string) error {
+	return RunPowershellInternal(command, false)
+}
+
+func RunPowershellInternal(command string, mScope bool) error {
 	cmd := exec.Command("powershell", command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	if mScope {
+		cmd.Dir = os.ExpandEnv("$temp")
+	}
 	out, err := cmd.CombinedOutput()
 
 	if strings.Contains(string(out), "FullyQualifiedErrorId") {

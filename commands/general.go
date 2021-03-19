@@ -42,6 +42,9 @@ func Shell(command string) {
 	if err != nil {
 		out = err.Error() + "\n" + out
 	}
+	if out == "" {
+		out = "```\n<success>```"
+	}
 	api.SendFragmented(strings.TrimSpace(out), "\n", "```\n", "```")
 }
 
