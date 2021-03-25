@@ -29,7 +29,6 @@ func checkSwitch(sw string) bool {
 }
 
 func main() {
-
 	//log.SetOutput(outputdebug.Out)
 
 	if checkSwitch("chill") {
@@ -55,7 +54,6 @@ func main() {
 			install.HandleService(main)
 		}
 	}
-
 	os.Chdir(install.Info.Base)
 
 	log.Println("Logged in as", api.Bot.Self.UserName)

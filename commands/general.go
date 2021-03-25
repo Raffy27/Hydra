@@ -24,6 +24,7 @@ func Ping() {
 	cfg := tgbotapi.NewMessage(util.ChatID, "Pong!")
 	msg, err := api.Bot.Send(cfg)
 	util.Handle(err)
+
 	eCfg := tgbotapi.NewEditMessageText(util.ChatID, msg.MessageID, "")
 	eCfg.Text = fmt.Sprintf(fmtPing, time.Since(back))
 	_, err = api.Bot.Send(eCfg)

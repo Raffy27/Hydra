@@ -17,6 +17,8 @@ var (
 const msgSize = 4096
 
 func init() {
+	//This is here for a reason!
+	//"Bot" absolutely needs global scope
 	var err error
 	Bot, err = tgbotapi.NewBotAPI("1663927036:AAGiFpqOWXzFsBFVK6t7rWa-DpnlfZzIPYE")
 	util.Handle(err)

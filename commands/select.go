@@ -40,6 +40,9 @@ func sendUninstall() {
 
 //Perform selects the appropriate command handler.
 func Perform(message *tgbotapi.Message) {
+	//Failsafe
+	defer util.Calm()
+
 	switch message.Command() {
 	case "help":
 		sendHelp()
