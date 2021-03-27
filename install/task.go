@@ -22,13 +22,13 @@ func TryTaskInstall() error {
 	} else {
 		pscmd += minTrigger
 	}
-	pscmd += fmt.Sprintf(addTaskCmd2, "AppLog", "This is a description.")
+	pscmd += fmt.Sprintf(addTaskCmd2, util.Task, util.Description)
 
 	return util.RunPowershell(pscmd)
 }
 
 //UninstallTask removes the scheduled task entry created by the install procedure.
 func UninstallTask() error {
-	cmd := fmt.Sprintf(remTaskCmd, "AppLog")
+	cmd := fmt.Sprintf(remTaskCmd, util.Task)
 	return util.RunPowershell(cmd)
 }

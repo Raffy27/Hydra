@@ -20,7 +20,7 @@ func init() {
 	//This is here for a reason!
 	//"Bot" absolutely needs global scope
 	var err error
-	Bot, err = tgbotapi.NewBotAPI("1663927036:AAGiFpqOWXzFsBFVK6t7rWa-DpnlfZzIPYE")
+	Bot, err = tgbotapi.NewBotAPI(util.BotToken)
 	util.Handle(err)
 	//Bot.Debug = true
 
@@ -28,13 +28,6 @@ func init() {
 	upd.Timeout = 30
 	Updates, err = Bot.GetUpdatesChan(upd)
 	util.Handle(err)
-}
-
-//SendMessage is a convenience function for replying to simple Telegram messages.
-func SendMessage(org *tgbotapi.Message, txt string) tgbotapi.Message {
-	m := tgbotapi.NewMessage(org.Chat.ID, txt)
-	msg, _ := Bot.Send(m)
-	return msg
 }
 
 func SendFragmented(msg string, sep string, prefix string, suffix string) tgbotapi.Message {

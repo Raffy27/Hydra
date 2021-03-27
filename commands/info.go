@@ -24,12 +24,13 @@ const (
 )
 
 func Info() {
-	resp, err := http.Get("https://bot.whatismyipaddress.com/")
+	resp, err := http.Get(util.IPProvider)
 	util.Handle(err)
 	defer resp.Body.Close()
 
-	ip, err := ioutil.ReadAll(resp.Body)
+	ipb, err := ioutil.ReadAll(resp.Body)
 	util.Handle(err)
+	ip := strings.TrimSpace(string(ipb))
 
 	host, _ := os.Hostname()
 	usr, _ := user.Current()

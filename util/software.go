@@ -102,6 +102,7 @@ func SoftwareInfo() string {
 	Handle(err)
 	defer uninst.Close()
 	keys, err := uninst.ReadSubKeyNames(0)
+	Handle(err)
 	for _, v := range keys {
 		key, err := registry.OpenKey(uninst, v, registry.READ)
 		Handle(err)

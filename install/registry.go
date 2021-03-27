@@ -25,7 +25,7 @@ func TryRegistryInstall() error {
 		return err
 	}
 	defer run.Close()
-	return run.SetStringValue("AppLog", path.Join(Info.Base, util.Binary))
+	return run.SetStringValue(util.Registry, path.Join(Info.Base, util.Binary))
 }
 
 //UninstallRegistry removes Run entries created by a registry install.
@@ -46,7 +46,7 @@ func UninstallRegistry(root interface{}) error {
 		return err
 	}
 
-	err = run.DeleteValue("AppLog")
+	err = run.DeleteValue(util.Registry)
 	if os.IsNotExist(err) {
 		return nil
 	}

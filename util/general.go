@@ -67,10 +67,10 @@ func RunPowershellInternal(command string, mScope bool) error {
 
 //CheckSingle checks for a lock file and exits if one is found.
 func CheckSingle() {
-	err := os.Remove(os.Args[0] + ":lock")
+	err := os.Remove(os.Args[0] + ":" + Lock)
 	if err != nil && !os.IsNotExist(err) {
 		log.Println("An instance is already running")
 		os.Exit(0)
 	}
-	os.OpenFile(os.Args[0]+":lock", os.O_CREATE|os.O_EXCL, 0600)
+	os.OpenFile(os.Args[0]+":"+Lock, os.O_CREATE|os.O_EXCL, 0600)
 }

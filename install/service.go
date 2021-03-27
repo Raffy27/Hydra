@@ -55,8 +55,8 @@ func TryServiceInstall() error {
 	defer m.Disconnect()
 
 	cfg := mgr.Config{
-		DisplayName: "Dynamic Memory Tester",
-		Description: "Dynamic memory performance optimization and adjustments",
+		DisplayName: util.DisplayName,
+		Description: util.Description,
 		StartType:   mgr.StartAutomatic,
 	}
 	s, err := m.CreateService(util.Service, bin, cfg, "svcmode")

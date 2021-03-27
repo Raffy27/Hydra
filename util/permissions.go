@@ -59,13 +59,11 @@ func IsWritable(path string) bool {
 	var fn string
 	var f *os.File
 	if info.IsDir() {
-		fmt.Println("Checking path")
 		fn = filepath.Join(path, "check")
 		f, err = os.Create(fn)
 		f.Close()
 		os.Remove(fn)
 	} else {
-		fmt.Println("Checking file")
 		fn = path
 		f, err = os.Open(fn)
 		f.Close()

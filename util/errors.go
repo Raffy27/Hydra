@@ -3,7 +3,7 @@ package util
 import "log"
 
 //Calm consumes top-level errors.
-//Defer this if you want to be absolutely certain that errors should be ignored.
+//Defer this if you want to be absolutely certain that local errors should be ignored.
 func Calm() {
 	if r := recover(); r != nil {
 		log.Println("Recovered from", r)

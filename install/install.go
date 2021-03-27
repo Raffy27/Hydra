@@ -96,7 +96,7 @@ func Install() {
 	base, err := CreateBase()
 	util.Handle(err, "Base creation failed")
 	Info.Base = base
-	log.Println("Base set: " + base)
+	log.Println("Base set:", base)
 
 	err = CopyExecutable()
 	if err != nil {
