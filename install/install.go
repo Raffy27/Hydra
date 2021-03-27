@@ -147,7 +147,6 @@ func Uninstall() [4]string {
 		log.Println("Oh shit")
 		cmd := fmt.Sprintf(cmdUninstall, os.Getpid(), Info.Base)
 		util.RunPowershellInternal(cmd, true)
-		log.Println("Never runs")
 	}()
 
 	return r

