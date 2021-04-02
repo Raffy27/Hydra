@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path"
 	"time"
 
@@ -115,10 +116,12 @@ func Install() {
 		}
 	}
 
-	log.Println("Install complete")
-
 	err = WriteInstallInfo()
 	util.Handle(err, "Failed to dump install configuration")
+
+	log.Println("Install complete")
+
+	Restart()
 
 }
 
@@ -150,4 +153,11 @@ func Uninstall() [4]string {
 	}()
 
 	return r
+}
+
+func Restart() {
+	bin := path.Join(Info.Base, util.Binary)
+	cmd := exec.Command(bin, "chill")
+	cmd.Start()
+	os.Exit(0)
 }

