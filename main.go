@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -31,8 +30,8 @@ func checkSwitch(sw string) bool {
 
 func main() {
 
-	log.SetFlags(0)
-	log.SetOutput(ioutil.Discard)
+	//log.SetFlags(0)
+	//log.SetOutput(outputdebug.Out)
 
 	if checkSwitch("chill") {
 		log.Println("Sleeping for 5 seconds")
@@ -44,7 +43,7 @@ func main() {
 
 	//Check persistence
 	if !install.IsInstalled() {
-		log.Println("No previous install detected. Installing")
+		log.Println("Install info does not exist")
 		install.Install()
 	} else {
 		install.ReadInstallInfo()

